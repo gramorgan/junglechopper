@@ -4,6 +4,11 @@ const NUM_BARS = 4;
 const INPUT_BPM = 137;
 const DEFAULT_OUTPUT_BPM = 160;
 
+// to get accurate sample trigger timing, we have to schedule sample triggers
+// some delay behind the settimeout loop using webaudioapi's timer.
+// this variable sets the size of that delay
+const AUDIO_DELAY_SECS = 0.1;
+
 window.addEventListener('load', () => {
     const audio_ctx = new AudioContext();
     let audiobuffer;
@@ -68,6 +73,7 @@ window.addEventListener('load', () => {
 
     let audiobuffer_sourcenode;
     function play_chop_at(index, start_time) {
+        audio_ctx.resume();
         audiobuffer_sourcenode = audio_ctx.createBufferSource();
         audiobuffer_sourcenode.buffer = audiobuffer;
         audiobuffer_sourcenode.playbackRate.value = output_bpm / INPUT_BPM;
@@ -87,31 +93,29 @@ window.addEventListener('load', () => {
             return;
         }
 
-        const start_time = audio_ctx.currentTime;
-        let next_time = start_time + interval / 1000;
+        let current_time = audio_ctx.currentTime;
         function tick(beat_num) {
             const chop_num = selected_chops[beat_num];
             if (chop_num !== null) {
-                play_chop_at(chop_num, next_time);
+                play_chop_at(chop_num, current_time + AUDIO_DELAY_SECS);
             }
 
-            // since the sample trigger is delayed behind by 1 interval, we also have to delay the ui update by 1 interval
             ui_timeout_id = setTimeout(
                 beat_num => {
                     clear_all_playing_classes();
                     colgroup.childNodes[beat_num].classList.add('playing');
                 }, 
-                interval,
+                AUDIO_DELAY_SECS * 1000,
                 beat_num
             );
 
             loop_timeout_id = setTimeout(
                 tick,
-                (next_time - audio_ctx.currentTime) * 1000,
+                (current_time - audio_ctx.currentTime) * 1000 + interval,
                 ++beat_num % NUM_CHOPS
             );
 
-            next_time += interval / 1000;
+            current_time += interval / 1000;
         }
         tick(0);
     });
