@@ -133,7 +133,7 @@ window.addEventListener('load', () => {
     });
 
     function clear_selected_for_col(col_num) {
-        const td_list = table.querySelectorAll(`[data-col='${col_num}']`);
+        const td_list = table.querySelectorAll(`[data-col='${col_num}'].selected`);
         for (td of td_list) {
             td.classList.remove('selected');
         }
@@ -148,7 +148,7 @@ window.addEventListener('load', () => {
         let row = target.parentNode.getAttribute('data-row');
 
         clear_selected_for_col(col);
-        if (selected_chops[col] === row) {
+        if (selected_chops[col] == row) {
             selected_chops[col] = null;
         }
         else {
@@ -162,8 +162,7 @@ window.addEventListener('load', () => {
         if (!(event.buttons & 1)) {
             return;
         }
-        const target = event.target;
-        table_event(target);
+        table_event(event.target);
     });
 
     table.addEventListener('mousedown', event => table_event(event.target));
