@@ -1,0 +1,35 @@
+h2, h4 {
+    margin: 5px;
+}
+
+#bpm {
+    margin-left: 30px;
+    width: 50px;
+}
+
+#button-container {
+    margin: 1vh;
+}
+
+#table {
+    width: 80vh;
+}
+
+#table td {
+    border: 1px black solid;
+    position: relative;
+}
+
+#table td:after {
+  content: '';
+  display: block;
+  margin-top: 100%;
+}
+
+.selected {
+    background-color: lightgreen;
+}
+
+.playing {
+    background-color: lightblue;
+}
