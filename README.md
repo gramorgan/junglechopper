@@ -1,7 +1,7 @@
 # junglechopper
 a webapp for chopping breakbeats
 
-check it out at https://people.ucsc.edu/~mlgrant/
+check it out at https://people.ucsc.edu/~mlgrant/junglechopper/
 
 I made this in a day so it's a little messy. works good though.
 
