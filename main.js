@@ -152,5 +152,5 @@ window.addEventListener('load', () => {
         table_event(target);
     });
 
-    table.addEventListener('click', event => table_event(event.target));
+    table.addEventListener('mousedown', event => table_event(event.target));
 });
