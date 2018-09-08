@@ -88,7 +88,7 @@ window.addEventListener('load', () => {
 
     let loop_timeout_id = null;
     let ui_timeout_id = null;
-    playbutton.addEventListener('click', () => {
+    function play() {
         if (loop_timeout_id !== null) {
             return;
         }
@@ -118,9 +118,9 @@ window.addEventListener('load', () => {
             current_time += interval / 1000;
         }
         tick(0);
-    });
+    }
 
-    stopbutton.addEventListener('click', () => {
+    function stop() {
         if (loop_timeout_id === null) {
             return;
         }
@@ -130,6 +130,21 @@ window.addEventListener('load', () => {
         clearTimeout(ui_timeout_id);
         loop_timeout_id = null;
         ui_timeout_id = null;
+    }
+
+    playbutton.addEventListener('click', play);
+    stopbutton.addEventListener('click', stop);
+    window.addEventListener('keypress', event => {
+        if (playbutton.disabled || event.code !== 'Space') {
+            return;
+        }
+
+        if (loop_timeout_id === null) {
+            play();
+        }
+        else {
+            stop();
+        }
     });
 
     function clear_selected_for_col(col_num) {
